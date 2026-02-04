@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valentine?</title>
+  <style>
+    :root{
+      --bg1:#0f1020;
+      --bg2:#1b1d3a;
+      --pink:#ff4d8d;
+      --red:#ff1f3d;
+      --white:#ffffff;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+
+    body{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--white);
+      overflow: hidden;
+      background:
+        radial-gradient(1200px 700px at 20% 20%, rgba(255,77,141,.25), transparent 60%),
+        radial-gradient(900px 600px at 80% 30%, rgba(255,31,61,.22), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      display: grid;
+      place-items: center;
+    }
+
+    /* floating hearts background */
+    .hearts{
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      opacity: 0.85;
+    }
+    .heart{
+      position: absolute;
+      bottom: -40px;
+      width: 18px;
+      height: 18px;
+      background: rgba(255,77,141,.55);
+      transform: rotate(45deg);
+      animation: floatUp linear infinite;
+      filter: blur(.1px);
+    }
+    .heart::before,
+    .heart::after{
+      content:"";
+      position:absolute;
+      width: 18px;
+      height: 18px;
+      background: inherit;
+      border-radius: 50%;
+    }
+    .heart::before{ left: -9px; top: 0; }
+    .heart::after{ left: 0; top: -9px; }
+
+    @keyframes floatUp{
+      from { transform: translateY(0) rotate(45deg); opacity: 0; }
+      10% { opacity: 1; }
+      to   { transform: translateY(-120vh) rotate(45deg); opacity: 0; }
+    }
+
+    .card{
+      position: relative;
+      width: min(720px, 92vw);
+      padding: clamp(20px, 4vw, 42px);
+      border-radius: 26px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 30px 90px rgba(0,0,0,.45);
+      text-align: center;
+      transform: translateZ(0);
+    }
+
+    .title{
+      font-size: clamp(34px, 6vw, 64px);
+      line-height: 1.05;
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
+      text-transform: lowercase;
+      background: linear-gradient(90deg, #fff, rgba(255,77,141,.95));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shimmer 2.8s ease-in-out infinite;
+    }
+    @keyframes shimmer{
+      0%,100%{ filter: drop-shadow(0 0 0 rgba(255,77,141,0)); }
+      50%{ filter: drop-shadow(0 0 18px rgba(255,77,141,.25)); }
+    }
+
+    .sub{
+      margin: 0 0 28px;
+      opacity: .9;
+      font-size: clamp(14px, 2.2vw, 18px);
+    }
+
+    .stage{
+      position: relative;
+      width: 100%;
+      height: 190px;
+      margin-top: 10px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.12);
+      border: 1px dashed rgba(255,255,255,.18);
+      overflow: hidden;
+    }
+
+    .btn{
+      position: absolute;
+      border: 0;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+    .btn:active{ transform: scale(.97); }
+
+    #yesBtn{
+      left: 22%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      padding: 18px 34px;
+      font-size: 22px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ff3857, var(--red));
+      color: #fff;
+      box-shadow: 0 16px 40px rgba(255,31,61,.35);
+      text-transform: uppercase;
+    }
+    #yesBtn:hover{
+      transform: translate(-50%, -50%) scale(1.06);
+      box-shadow: 0 18px 55px rgba(255,31,61,.45);
+      filter: saturate(1.1);
+    }
+
+    #noBtn{
+      left: 72%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      padding: 14px 26px;
+      font-size: 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.16);
+      color: #fff;
+      box-shadow: 0 14px 34px rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.22);
+      text-transform: uppercase;
+    }
+
+    .result{
+      display: none;
+      margin-top: 18px;
+      animation: popIn .45s ease-out both;
+    }
+    @keyframes popIn{
+      from{ transform: translateY(14px) scale(.98); opacity: 0; }
+      to  { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .gifWrap{
+      margin-top: 18px;
+      display: grid;
+      place-items: center;
+    }
+    .gifWrap img{
+      width: min(420px, 86vw);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 22px 70px rgba(0,0,0,.5);
+    }
+
+    .tiny{
+      margin-top: 10px;
+      font-size: 13px;
+      opacity: .75;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="hearts" id="hearts"></div>
+
+  <main class="card">
+    <h1 class="title">Mrs. Angeela Wahaaj, Will you be my Valentine?</h1>
+
+    <section class="stage" id="stage" aria-label="buttons stage">
+      <button class="btn" id="yesBtn" type="button">YES</button>
+      <button class="btn" id="noBtn" type="button">NO</button>
+    </section>
+
+    <section class="result" id="result">
+      <h2 style="margin: 10px 0 6px; font-size: 28px;">Wooohooo!!! 😳💥</h2>
+      <div class="gifWrap">
+        <img
+          alt="Mind blown gif"
+          src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
+        />
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Floating hearts background
+    const hearts = document.getElementById("hearts");
+    function spawnHeart(){
+      const h = document.createElement("div");
+      h.className = "heart";
+      const size = 10 + Math.random()*18;
+      h.style.width = size + "px";
+      h.style.height = size + "px";
+      h.style.left = (Math.random()*100) + "vw";
+      h.style.animationDuration = (4 + Math.random()*5) + "s";
+      h.style.opacity = (0.25 + Math.random()*0.55);
+      hearts.appendChild(h);
+      setTimeout(()=>h.remove(), 10000);
+    }
+    setInterval(spawnHeart, 220);
+
+    const stage = document.getElementById("stage");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn  = document.getElementById("noBtn");
+    const result = document.getElementById("result");
+
+    // Keep NO button inside the stage bounds.
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    function moveNoButton(){
+      const stageRect = stage.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      // random target position (in px relative to stage)
+      const padding = 10;
+      const maxX = stageRect.width  - btnRect.width  - padding;
+      const maxY = stageRect.height - btnRect.height - padding;
+
+      const x = clamp(Math.random()*maxX, padding, maxX);
+      const y = clamp(Math.random()*maxY, padding, maxY);
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+      noBtn.style.transform = "translate(0, 0)";
+
+      // Add a little "whoosh" feel
+      noBtn.animate(
+        [
+          { transform: "translate(0,0) scale(1)" },
+          { transform: "translate(0,0) scale(1.08)" },
+          { transform: "translate(0,0) scale(1)" }
+        ],
+        { duration: 220, easing: "ease-out" }
+      );
+    }
+
+    // Run away on hover / focus / touch
+    noBtn.addEventListener("mouseenter", moveNoButton);
+    noBtn.addEventListener("focus", moveNoButton);
+
+    // Mobile: make it run away when they try to tap it
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      moveNoButton();
+    }, { passive: false });
+
+    // Click YES: hide buttons + show mind blown gif
+    yesBtn.addEventListener("click", () => {
+      yesBtn.style.display = "none";
+      noBtn.style.display  = "none";
+      stage.style.display  = "none";
+      result.style.display = "block";
+    });
+
+    // On load: slightly randomize NO position so it doesn't look static
+    window.addEventListener("load", () => {
+      moveNoButton();
+      // Put it somewhere not too close to YES on first load
+      setTimeout(moveNoButton, 200);
+    });
+  </script>
+</body>
+</html>
